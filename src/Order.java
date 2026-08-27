@@ -4,24 +4,24 @@ import java.util.Arrays;
 
 public class Order {
     public String customer;
-    public Product[] productBasket; // Одно общее поле для корзины
+    public Product[] productBasket;
 
-    // Конструктор
     public Order(String customer, Product[] productBasket) {
         this.customer = customer;
         this.productBasket = productBasket;
     }
-
 
     @Override
     public String toString() {
         return "Заказчик: " + customer + ", Корзина: " + Arrays.toString(productBasket);
     }
 
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Order order = (Order) o;
+
         if (!Objects.equals(this.customer, order.customer)) {
             return false;
         }
@@ -31,12 +31,31 @@ public class Order {
         if (this.productBasket.length != order.productBasket.length) {
             return false;
         }
-        for (int i = 0; i < this.productBasket.length; i++) {
-            if (!Objects.equals(this.productBasket[i], order.productBasket[i])) {
-                return false; // Если хоть один элемент не совпал — объекты не равны
+
+
+        boolean isBasketEqual = true;
+
+
+        for (int i = 0; i < productBasket.length; i++) {
+            Product p1 = this.productBasket[i];
+            Product p2 = order.productBasket[i];
+
+
+            if (p1 == null || p2 == null) {
+                if (p1 != p2) {
+                    isBasketEqual = false;
+                    break;
+                }
+                continue;
+            }
+
+
+            if (!p1.equals(p2)) {
+                isBasketEqual = false;
+                break;
             }
         }
 
-        return true;
+        return isBasketEqual;
     }
 }
